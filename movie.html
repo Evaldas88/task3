@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Movie List </title>
+    <style>
+        h1,
+        span {
+            color: white
+        }
+
+        body {
+            background: black;
+        }
+
+        .container {
+            align-items: center;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+
+        }
+
+        img {
+            max-height: 400px;
+            max-width: 200px;
+        }
+
+        p {
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .button {
+            text-align: center;
+        }
+
+        .movie {
+            font-size: 12px;
+            padding-bottom: 20px;
+            color: white;
+        }
+
+    </style>
+</head>
+
+<body>
+    <h1>Filmų Sąrašas</h1>
+
+    <div class="container"></div>
+    <div class="button">
+        <div><button disabled="disabled" data-direction="prev" class="btn btn-primary"
+                onclick="prev()">Ankstesnis</button>
+            <span class="nr"> </span>
+            <button data-direction="next" class="btn btn-primary" onclick="next()">Sekantis</button>
+        </div>
+    </div>
+    <script>
+
+
+        let page = 1
+        let url = 'https://www.omdbapi.com/?apikey=c4d4cd86&s=Batman&page=' + page
+        const getData = async (url) => {
+            try {
+                const data = await fetch(url)
+                return await data.json()
+            } catch {
+                console.log('Nepavyko prisijungti prie serverio')
+            }
+        }
+
+        const init = async () => {
+            let html = ''
+            let data = await getData(url)
+            data = data.Search
+
+            for (let i = 0; i < data.length; i++) {
+
+                html += `<div class="movie">
+                <img src="${data[i].Poster}" alt="${data[i].Title}">
+
+                <div class="name">${data[i].Title}</div> <div>${data[i].Year}</div> <div>${data[i].Type}</div>
+            </div>`
+
+
+            }
+
+            document.querySelector('.nr').innerHTML = `Puslapis ${page}`
+            document.querySelector('.container').innerHTML = html
+
+
+        }
+        init()
+
+        function prev() {
+
+            if (page >= 1) {
+                document.querySelector('[data-direction="prev"]').removeAttribute('disabled')
+                page--;
+                url = 'https://www.omdbapi.com/?apikey=c4d4cd86&s=Batman&page=' + page
+                init()
+            }
+
+            if (page === 1)
+                document.querySelector('[data-direction="prev"]').setAttribute('disabled', 'disabled')
+
+        }
+
+        function next() {
+
+            page++;
+            url = 'https://www.omdbapi.com/?apikey=c4d4cd86&s=Batman&page=' + page
+            init()
+            if (page >= 2)
+            document.querySelector('[data-direction="prev"]').removeAttribute('disabled')
+
+        }
+    </script>
+
+</body>
+
+</html>
