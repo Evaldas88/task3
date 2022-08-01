@@ -109,7 +109,10 @@
             }
 
             if (page === 1)
-                document.querySelector('[data-direction="prev"]').setAttribute('disabled', 'disabled')
+                document.querySelector('[data-direction="prev"]').setAttribute('disabled', 'disabled');
+            if(page <=53){
+                    document.querySelector('[data-direction="next"]').removeAttribute('disabled', 'disabled');
+                }
 
         }
 
@@ -120,6 +123,10 @@
             init()
             if (page >= 2)
             document.querySelector('[data-direction="prev"]').removeAttribute('disabled')
+            if (page === 53){
+                document.querySelector('[data-direction="next"]').setAttribute('disabled', 'disabled')
+
+            }
 
         }
     </script>
